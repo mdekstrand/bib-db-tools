@@ -1,0 +1,29 @@
+{
+  "name": "bib-db-tools",
+  "version": "1.0.0",
+  "description": "Tools for working with bibliographic files for database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Ekstrand <michaelekstrand@boisestate.edu>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "byline": "^5.0.0",
+    "cheerio": "^1.0.0-rc.2",
+    "fs-extra": "^5.0.0",
+    "gulp": "gulpjs/gulp#v4.0.0",
+    "gulplog": "^1.0.0",
+    "mysql": "^2.15.0",
+    "progress": "^2.0.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "semaphore": "^1.1.0",
+    "yargs": "^11.0.0"
+  },
+  "jshintConfig": {
+    "node": true,
+    "esversion": 6
+  }
+}
