@@ -29,7 +29,7 @@ CREATE TABLE article (
   title          VARCHAR(1000) NOT NULL,
   abstract       TEXT,
   proc_id        INTEGER       NOT NULL,
-  article_hb_key VARCHAR(30),
+  article_hb_key VARCHAR(50),
 
   FOREIGN KEY (proc_id) REFERENCES proceedings (proc_id),
   INDEX (article_hb_key)
