@@ -17,6 +17,7 @@
     "gulp": "gulpjs/gulp#v4.0.0",
     "gulplog": "^1.0.0",
     "mississippi": "^2.0.0",
+    "moment": "^2.20.1",
     "mysql": "^2.15.0",
     "progress": "^2.0.0",
     "request": "^2.83.0",
