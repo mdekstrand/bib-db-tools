@@ -22,7 +22,9 @@ module.exports.listConferences = hcibib.listConferences;
 
 module.exports.importConferences = function importConferences() {
   var url = args.url;
-  return Promise.using(dbutil.connect(url), (db) => {
-    return hcibib.importConferences('data/confer.bib', db);
+  return Promise.using(dbutil.makePool(url), async (pool) => {
+    let confs = await Promise.using(pool.acquire(),
+      (db) => hcibib.importConferences('data/confer.bib', db));
+    await hcibib.importConferenceArticles(confs, pool);
   });
 };
