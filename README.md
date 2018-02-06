@@ -15,7 +15,7 @@ To install the Node packages in use, run:
 
 1.  Download the data:
 
-        gulp download
+        npx gulp download
 
 2.  Run the schema file to create the database:
 
@@ -23,6 +23,6 @@ To install the Node packages in use, run:
 
 2.  Import the conference data:
 
-        gulp importConferences --url=mysql://user:password@host:port/hcibib
+        npx gulp importConferences --url=mysql://user:password@host:port/hcibib
 
     This takes about a half an hour.
