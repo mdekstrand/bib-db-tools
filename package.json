@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Michael Ekstrand <michaelekstrand@boisestate.edu>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.1",
     "byline": "^5.0.0",

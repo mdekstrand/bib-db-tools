@@ -2,7 +2,19 @@
 
 This repository contains tools to use the [HCI Bibliography](http://hcibib.org) as a databases example.
 
-## Prerequisites
+Import it as Maven project to use the example; the JavaScript things are for re-importing the data set from scratch.
+
+## Main Example
+
+Import `pom.xml` as a Maven project in your Java IDE of choice.
+
+The `ArticleShell` script takes a single command-line argument (‘script parameter’), the MySQL URL.  It looks like this:
+
+    mysql://user:password@host:port/hcibib
+
+## Import Scripts
+
+### Prerequisites
 
 - MySQL
 - Node.js (tested with version 8.x LTS)
@@ -11,7 +23,7 @@ To install the Node packages in use, run:
 
     npm install
 
-## Import Steps (MySQL)
+### Import Steps (MySQL)
 
 1.  Download the data:
 
