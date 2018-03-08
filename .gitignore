@@ -1,4 +1,7 @@
 /node_modules
+/target
 /data
 /dump/*.sql
 /dump/*.zip
+*.iml
+/.idea
