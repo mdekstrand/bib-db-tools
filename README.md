@@ -1,4 +1,4 @@
-# hcibi DB tools
+# hcibib DB tools
 
 This repository contains tools to use the [HCI Bibliography](http://hcibib.org) as a databases example.
 
