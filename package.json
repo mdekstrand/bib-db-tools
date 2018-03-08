@@ -17,6 +17,7 @@
     "fs-extra": "^5.0.0",
     "gulp": "gulpjs/gulp#v4.0.0",
     "gulplog": "^1.0.0",
+    "minimist": "^1.2.0",
     "mississippi": "^2.0.0",
     "moment": "^2.20.1",
     "mysql": "^2.15.0",
@@ -24,8 +25,7 @@
     "promise-limit": "^2.5.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "semaphore": "^1.1.0",
-    "yargs": "^11.0.0"
+    "semaphore": "^1.1.0"
   },
   "jshintConfig": {
     "node": true,

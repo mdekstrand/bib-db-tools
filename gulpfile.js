@@ -1,12 +1,12 @@
 const fs = require('fs-extra');
 const Promise = require('bluebird');
-const yargs = require('yargs');
+const minimist = require('minimist');
 
 const dbutil = require('./lib/dbutil');
 const hcibib = require('./lib/hcibib');
 
 const dataDir = 'data';
-const args = yargs.argv;
+const args = minimist(process.argv.slice(2));
 
 module.exports.listBibFiles = async function listBibFiles() {
   let files = await hcibib.listBibFiles();
@@ -15,13 +15,13 @@ module.exports.listBibFiles = async function listBibFiles() {
   }
 };
 module.exports.download = async function download() {
-  let mdr = await fs.ensureDir(dataDir);
+  await fs.ensureDir(dataDir);
   return hcibib.downloadFiles(dataDir);
 };
 module.exports.listConferences = hcibib.listConferences;
 
 module.exports.importConferences = function importConferences() {
-  var url = args.url;
+  let url = args.url;
   return Promise.using(dbutil.makePool(url), async (pool) => {
     let confs = await Promise.using(pool.acquire(),
       (db) => hcibib.importConferences('data/confer.bib', db));
