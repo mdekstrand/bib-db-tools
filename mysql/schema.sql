@@ -6,6 +6,7 @@ CREATE TABLE author (
   author_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   author_name VARCHAR(255) NOT NULL
 );
+CREATE INDEX author_name_idx ON author (author_name);
 
 CREATE TABLE conf_series (
   cs_id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -22,7 +23,6 @@ CREATE TABLE proceedings (
 
   FOREIGN KEY (cs_id) REFERENCES conf_series (cs_id)
 );
-CREATE INDEX proc_cs_idx ON proceedings (cs_id);
 
 CREATE TABLE article (
   article_id     INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -43,5 +43,3 @@ CREATE TABLE article_author (
   FOREIGN KEY (article_id) REFERENCES article (article_id),
   FOREIGN KEY (author_id) REFERENCES author (author_id)
 );
-CREATE INDEX article_author_article_idx ON article_author (article_id);
-CREATE INDEX article_author_author_idx ON article_author (author_id);

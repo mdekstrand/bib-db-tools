@@ -89,6 +89,29 @@ public class ArticleShell {
 
     }
 
+    /**
+     * Search titles and abstracts by text.
+     */
+    @Command
+    public void search(String query) throws SQLException {
+        String sql = "SELECT article_id, title" +
+                " FROM article" +
+                " WHERE MATCH (title, abstract) AGAINST (?)";
+        System.out.format("Articles matching %s:%n", query);
+        try (PreparedStatement stmt = db.prepareStatement(sql)) {
+            // Set the first parameter (query key) to the series
+            stmt.setString(1, query);
+            // once parameters are bound we can run!
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("article_id");
+                    String title = rs.getString("title");
+                    System.out.format("%d\t%s%n", id, title);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException, SQLException {
         String dbUrl = args[0];
         try (Connection cxn = DriverManager.getConnection("jdbc:" + dbUrl)) {
