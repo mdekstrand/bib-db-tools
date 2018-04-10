@@ -16,6 +16,7 @@
     "fs-extra": "^5.0.0",
     "gulp": "gulpjs/gulp#v4.0.0",
     "gulplog": "^1.0.0",
+    "html-entities": "^1.2.1",
     "minimist": "^1.2.0",
     "mississippi": "^2.0.0",
     "moment": "^2.20.1",
