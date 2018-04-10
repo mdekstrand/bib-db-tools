@@ -1,17 +1,13 @@
-DROP DATABASE IF EXISTS hcibib;
-CREATE DATABASE IF NOT EXISTS hcibib;
-USE hcibib;
-
 CREATE TABLE author (
   author_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   author_name VARCHAR(255) NOT NULL
-);
+) CHARACTER SET utf8;
 CREATE INDEX author_name_idx ON author (author_name);
 
 CREATE TABLE conf_series (
   cs_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   cs_hb_key VARCHAR(30) NOT NULL UNIQUE
-);
+) CHARACTER SET utf8;
 
 CREATE TABLE proceedings (
   proc_id         INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -22,7 +18,7 @@ CREATE TABLE proceedings (
   proc_entry_count INTEGER DEFAULT 0,
 
   FOREIGN KEY (cs_id) REFERENCES conf_series (cs_id)
-);
+) CHARACTER SET utf8;
 
 CREATE TABLE article (
   article_id     INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -33,7 +29,7 @@ CREATE TABLE article (
 
   FOREIGN KEY (proc_id) REFERENCES proceedings (proc_id),
   INDEX (article_hb_key)
-);
+) CHARACTER SET utf8;
 
 CREATE TABLE article_author (
   article_id INTEGER NOT NULL,
@@ -42,4 +38,4 @@ CREATE TABLE article_author (
   PRIMARY KEY (article_id, position),
   FOREIGN KEY (article_id) REFERENCES article (article_id),
   FOREIGN KEY (author_id) REFERENCES author (author_id)
-);
+) CHARACTER SET utf8;

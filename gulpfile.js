@@ -7,6 +7,7 @@ const log = require('gulplog');
 const dbutil = require('./lib/dbutil');
 const hcibib = require('./lib/hcibib');
 const confer = require('./lib/confer');
+const papers = require('./lib/papers');
 
 const dataDir = 'data';
 const args = minimist(process.argv.slice(2));
@@ -29,5 +30,20 @@ module.exports.importConferenceData = function importConferences() {
     let confs = await Promise.using(pool.acquire(),
       (db) => confer.importConferences('data/confer.bib', db));
     await confer.importConferenceArticles(confs, pool);
+  });
+};
+
+module.exports.importAllData = function importConferences() {
+  let url = args.url;
+  return Promise.using(dbutil.makePool(url), async (pool) => {
+    let confP = Promise.using(pool.acquire(),
+      (db) => papers.importConferences(db));
+    let jvP = Promise.using(pool.acquire(),
+      async (db) => {
+        let jnls = await papers.importJournals(db);
+        return papers.importJournalVolumes(db, jnls);
+      });
+    let [confs, volumes] = await Promise.all(confP, jvP);
+    await confer.importConferenceArticles(confs.concat(volumes), pool);
   });
 };
