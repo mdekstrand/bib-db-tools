@@ -43,7 +43,7 @@ module.exports.importAllData = function importConferences() {
         let jnls = await papers.importJournals(db);
         return papers.importJournalVolumes(db, jnls);
       });
-    let [confs, volumes] = await Promise.all(confP, jvP);
+    let [confs, volumes] = await Promise.all([confP, jvP]);
     await confer.importConferenceArticles(confs.concat(volumes), pool);
   });
 };

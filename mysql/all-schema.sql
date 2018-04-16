@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS hcibib2;
+CREATE DATABASE hcibib2;
+USE hcibib2;
+
 CREATE TABLE author (
   author_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   author_name VARCHAR(255) NOT NULL
@@ -38,6 +42,7 @@ CREATE TABLE issue (
   journal_id INTEGER NOT NULL,
   issue_vol VARCHAR(10),
   issue_num VARCHAR(10),
+  issue_title VARCHAR(255),
 
   FOREIGN KEY (pub_id) REFERENCES publication (pub_id),
   FOREIGN KEY (journal_id) REFERENCES journal (journal_id)
