@@ -44,6 +44,6 @@ module.exports.importAllData = function importConferences() {
         return papers.importJournalVolumes(db, jnls);
       });
     let [confs, volumes] = await Promise.all([confP, jvP]);
-    await confer.importConferenceArticles(confs.concat(volumes), pool);
+    await papers.importArticles(confs.concat(volumes), pool);
   });
 };
