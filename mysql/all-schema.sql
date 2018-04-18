@@ -55,7 +55,7 @@ CREATE TABLE article (
   pub_id         INTEGER       NOT NULL,
   article_hb_key VARCHAR(50),
 
-  FOREIGN KEY (pub_id) REFERENCES proceedings (pub_id),
+  FOREIGN KEY (pub_id) REFERENCES publication (pub_id),
   INDEX (article_hb_key)
 ) CHARACTER SET utf8;
 

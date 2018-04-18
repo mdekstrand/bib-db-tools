@@ -12,6 +12,10 @@ const papers = require('./lib/papers');
 const dataDir = 'data';
 const args = minimist(process.argv.slice(2));
 
+if (process.env.NODE_ENV !== 'production'){
+  require('longjohn');
+}
+
 module.exports.listBibFiles = async function listBibFiles() {
   let files = await hcibib.listBibFiles();
   for (let fn of files) {

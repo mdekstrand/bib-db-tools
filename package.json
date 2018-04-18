@@ -9,6 +9,10 @@
   "author": "Michael Ekstrand <michaelekstrand@boisestate.edu>",
   "license": "UNLICENSED",
   "dependencies": {
+    "any-db": "^2.2.1",
+    "any-db-mysql": "^2.1.2",
+    "any-db-postgres": "^2.1.5",
+    "any-db-transaction": "^2.2.2",
     "bluebird": "^3.5.1",
     "byline": "^5.0.0",
     "cheerio": "^1.0.0-rc.2",
@@ -20,7 +24,6 @@
     "minimist": "^1.2.0",
     "mississippi": "^2.0.0",
     "moment": "^2.20.1",
-    "mysql": "^2.15.0",
     "progress": "^2.0.0",
     "promise-limit": "^2.5.0",
     "request": "^2.83.0",
@@ -32,6 +35,7 @@
     "esversion": 6
   },
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "^4.19.1",
+    "longjohn": "^0.2.12"
   }
 }

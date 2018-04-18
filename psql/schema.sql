@@ -1,47 +1,73 @@
--- Version: 2015-10-21
-
-DROP TABLE IF EXISTS institution CASCADE;
-CREATE TABLE institution (
-  inst_id SERIAL PRIMARY KEY,
-  inst_name VARCHAR NOT NULL,
-  inst_place VARCHAR);
-
 DROP TABLE IF EXISTS author CASCADE;
 CREATE TABLE author (
   author_id SERIAL PRIMARY KEY,
-  author_name VARCHAR NOT NULL,
-  current_inst_id INTEGER REFERENCES institution);
+  author_name VARCHAR(255) NOT NULL
+);
+CREATE INDEX author_name_idx ON author (author_name);
 
 DROP TABLE IF EXISTS publication CASCADE;
 CREATE TABLE publication (
   pub_id SERIAL PRIMARY KEY,
-  pub_title VARCHAR NOT NULL,
-  pub_hb_key VARCHAR UNIQUE);
+  pub_date DATE NOT NULL,
+  pub_hb_key VARCHAR(30) UNIQUE NOT NULL
+);
+
+DROP TABLE IF EXISTS conf_series CASCADE;
+CREATE TABLE conf_series (
+  cs_id SERIAL PRIMARY KEY,
+  cs_hb_key VARCHAR(30) NOT NULL UNIQUE
+);
+
+DROP TABLE IF EXISTS proceedings CASCADE;
+CREATE TABLE proceedings (
+  pub_id          INTEGER PRIMARY KEY,
+  proc_title      VARCHAR(500) NOT NULL,
+  proc_hb_key     VARCHAR(30) UNIQUE,
+  cs_id           INTEGER      NOT NULL,
+  proc_start_date DATE,
+  proc_entry_count INTEGER DEFAULT 0,
+
+  FOREIGN KEY (cs_id) REFERENCES conf_series (cs_id),
+  FOREIGN KEY (pub_id) REFERENCES publication (pub_id)
+);
+
+DROP TABLE IF EXISTS journal CASCADE;
+CREATE TABLE journal (
+  journal_id SERIAL PRIMARY KEY,
+  journal_hb_key VARCHAR(30) UNIQUE NOT NULL,
+  journal_title VARCHAR(500) NOT NULL
+);
 
 DROP TABLE IF EXISTS issue CASCADE;
 CREATE TABLE issue (
-  issue_id SERIAL PRIMARY KEY,
-  pub_id INTEGER NOT NULL REFERENCES publication,
-  iss_volume INTEGER,
-  iss_number INTEGER,
-  iss_date DATE,
-  iss_title VARCHAR,
-  iss_hb_key VARCHAR UNIQUE);
+  pub_id INTEGER PRIMARY KEY,
+  journal_id INTEGER NOT NULL,
+  issue_vol VARCHAR(10),
+  issue_num VARCHAR(10),
+  issue_title VARCHAR(255),
+
+  FOREIGN KEY (pub_id) REFERENCES publication (pub_id),
+  FOREIGN KEY (journal_id) REFERENCES journal (journal_id)
+);
 
 DROP TABLE IF EXISTS article CASCADE;
 CREATE TABLE article (
-  article_id SERIAL PRIMARY KEY,
-  title VARCHAR NOT NULL,
-  abstract TEXT,
-  issue_id INTEGER NOT NULL REFERENCES issue,
-  article_hb_key VARCHAR UNIQUE);
+  article_id     SERIAL PRIMARY KEY,
+  title          VARCHAR(1000) NOT NULL,
+  abstract       TEXT,
+  pub_id         INTEGER       NOT NULL,
+  article_hb_key VARCHAR(50),
+
+  FOREIGN KEY (pub_id) REFERENCES publication (pub_id)
+);
+CREATE INDEX article_hb_key_idx ON article (article_hb_key);
 
 DROP TABLE IF EXISTS article_author CASCADE;
 CREATE TABLE article_author (
-  article_id INTEGER NOT NULL REFERENCES article,
-  author_id INTEGER NOT NULL REFERENCES author,
+  article_id INTEGER NOT NULL,
+  author_id INTEGER NOT NULL,
   position INTEGER NOT NULL DEFAULT 0,
-  inst_id INTEGER REFERENCES institution,
-  PRIMARY KEY (article_id, position));
-CREATE INDEX article_author_article_idx ON article_author (article_id);
-CREATE INDEX article_author_author_idx ON article_author (author_id);
+  PRIMARY KEY (article_id, position),
+  FOREIGN KEY (article_id) REFERENCES article (article_id),
+  FOREIGN KEY (author_id) REFERENCES author (author_id)
+);
