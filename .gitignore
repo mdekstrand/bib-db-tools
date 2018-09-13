@@ -5,3 +5,6 @@
 /dump/*.zip
 *.iml
 /.idea
+/.settings
+/.project
+/.classpath
