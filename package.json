@@ -17,16 +17,16 @@
     "byline": "^5.0.0",
     "cheerio": "^1.0.0-rc.2",
     "ent": "^2.2.0",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^7.0.0",
     "gulp": "^4.0.0",
     "gulplog": "^1.0.0",
     "html-entities": "^1.2.1",
     "minimist": "^1.2.0",
-    "mississippi": "^2.0.0",
+    "mississippi": "^3.0.0",
     "moment": "^2.22.2",
-    "progress": "^2.0.0",
+    "progress": "^2.0.1",
     "promise-limit": "^2.7.0",
-    "request": "^2.83.0",
+    "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "semaphore": "^1.1.0"
   },
@@ -35,7 +35,7 @@
     "esversion": 6
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
+    "eslint": "^5.8.0",
     "longjohn": "^0.2.12"
   }
 }
