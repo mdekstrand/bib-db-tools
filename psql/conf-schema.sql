@@ -39,8 +39,7 @@ CREATE TABLE article_author (
   article_id INTEGER NOT NULL,
   author_id INTEGER NOT NULL,
   position INTEGER NOT NULL DEFAULT 0,
-  PRIMARY KEY (article_id, author_id),
+  PRIMARY KEY (article_id, position),
   FOREIGN KEY (article_id) REFERENCES article (article_id),
-  FOREIGN KEY (author_id) REFERENCES author (author_id),
-  UNIQUE (article_id, position)
+  FOREIGN KEY (author_id) REFERENCES author (author_id)
 );
