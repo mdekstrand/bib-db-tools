@@ -71,3 +71,15 @@ CREATE TABLE article_author (
   FOREIGN KEY (article_id) REFERENCES article (article_id),
   FOREIGN KEY (author_id) REFERENCES author (author_id)
 );
+
+DROP VIEW IF EXISTS pub_title
+CREATE VIEW pub_title
+AS SELECT pub_id, 
+  COALESCE(proc_title, iss_title,
+           journal_title || ' vol. ' || iss_volume || ' no. ' || iss_number,
+           journal_title || ' no. ' || iss_number,
+           journal_title || ' vol. ' || iss_volume) AS pub_title
+FROM publication
+LEFT JOIN proceedings USING (pub_id)
+LEFT JOIN issue USING pub_id
+LEFT JOIN journal USING (journal_id);
