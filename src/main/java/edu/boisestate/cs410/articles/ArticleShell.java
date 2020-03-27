@@ -2,12 +2,19 @@ package edu.boisestate.cs410.articles;
 
 import com.budhash.cliche.Command;
 import com.budhash.cliche.ShellFactory;
+import picocli.CommandLine;
 
 import java.io.IOException;
 import java.sql.*;
 
-public class ArticleShell {
-    private final Connection db;
+@CommandLine.Command(name="shell")
+public class ArticleShell implements Runnable {
+    @CommandLine.ParentCommand
+    private ArticleMain main;
+
+    private Connection db;
+
+    public ArticleShell() {}
 
     public ArticleShell(Connection cxn) {
         db = cxn;
@@ -112,12 +119,14 @@ public class ArticleShell {
         }
     }
 
-    public static void main(String[] args) throws IOException, SQLException {
-        String dbUrl = args[0];
-        try (Connection cxn = DriverManager.getConnection("jdbc:" + dbUrl)) {
-            ArticleShell shell = new ArticleShell(cxn);
-            ShellFactory.createConsoleShell("article", "", shell)
+    @Override
+    public void run() {
+        try (Connection cxn = main.openDatabase()) {
+            db = cxn;
+            ShellFactory.createConsoleShell("article", "", this)
                         .commandLoop();
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
