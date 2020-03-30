@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "pebble/layout.peb" %}
 
 {% block content %}
 <h1>Article Database</h1>

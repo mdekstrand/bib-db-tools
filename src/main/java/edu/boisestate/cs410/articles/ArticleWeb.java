@@ -1,14 +1,10 @@
 package edu.boisestate.cs410.articles;
 
+import io.javalin.Javalin;
+import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.template.pebble.PebbleTemplateEngine;
-
-import static spark.Spark.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -21,11 +17,7 @@ public class ArticleWeb implements Runnable {
     @CommandLine.ParentCommand
     private ArticleMain main;
 
-    private static String render(Object model, String template) {
-        return new PebbleTemplateEngine().render(new ModelAndView(model, template));
-    }
-
-    public String home(Request req, Response res) throws SQLException {
+    public void home(Context ctx) throws SQLException {
         Map<String,Object> model = new HashMap<>();
         Map<String,Object> stats = new HashMap<>();
         model.put("stats", stats);
@@ -38,13 +30,21 @@ public class ArticleWeb implements Runnable {
             }
         }
 
-        return render(model, "home.html");
+        ctx.render("pebble/home.peb", model);
     }
 
     @Override
     public void run() {
         logger.info("setting up web app");
-        get("/", this::home);
+        var app = Javalin.create().start(4080);
+        app.get("/", this::home);
         logger.info("ready to go!");
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                /* do nothing */
+            }
+        }
     }
 }
