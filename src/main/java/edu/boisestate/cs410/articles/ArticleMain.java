@@ -7,7 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @CommandLine.Command(name="bib-db", subcommands={
-        ArticleShell.class
+        ArticleShell.class,
+        ArticleWeb.class
 })
 public class ArticleMain implements Runnable {
     @CommandLine.Option(names="--db-url")
