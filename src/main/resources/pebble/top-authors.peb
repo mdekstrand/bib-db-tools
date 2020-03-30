@@ -1,0 +1,11 @@
+{% extends "pebble/layout.peb" %}
+
+{% block content %}
+<h1>Top Authors</h1>
+
+<ul>
+{% for author in authors %}
+<li><a href="/authors/{{ author.id }}">{{ author.name }}</a> ({{  author.paperCount }} papers)
+{% endfor %}
+</ul>
+{% endblock %}

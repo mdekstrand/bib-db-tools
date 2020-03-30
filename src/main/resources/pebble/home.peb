@@ -4,4 +4,9 @@
 <h1>Article Database</h1>
 
 <p>Article database searching {{ stats.articleCount }} articles.</p>
+
+<h2>Top Boards</h2>
+<ul>
+<li><a href="/authors/top">Top authors</a>
+</ul>
 {% endblock %}

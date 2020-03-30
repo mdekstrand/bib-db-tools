@@ -1,5 +1,7 @@
 package edu.boisestate.cs410.articles;
 
+import edu.boisestate.cs410.articles.model.AuthorSummary;
+import edu.boisestate.cs410.articles.model.DBStats;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.slf4j.Logger;
@@ -17,17 +19,21 @@ public class ArticleWeb implements Runnable {
     @CommandLine.ParentCommand
     private ArticleMain main;
 
+    public void topAuthors(Context ctx) throws SQLException {
+        Map<String,Object> model = new HashMap<>();
+
+        try (var db = main.openDatabase()) {
+            model.put("authors", AuthorSummary.fetchTopPublished(db));
+        }
+
+        ctx.render("pebble/top-authors.peb", model);
+    }
+
     public void home(Context ctx) throws SQLException {
         Map<String,Object> model = new HashMap<>();
-        Map<String,Object> stats = new HashMap<>();
-        model.put("stats", stats);
 
-        try (var db = main.openDatabase(); var stmt = db.createStatement()) {
-            var cq = "SELECT COUNT(*) FROM article";
-            try (var rs = stmt.executeQuery(cq)) {
-                if (!rs.next()) throw new RuntimeException("statistics had no results");
-                stats.put("articleCount", rs.getInt(1));
-            }
+        try (var db = main.openDatabase()) {
+            model.put("stats", DBStats.fetch(db));
         }
 
         ctx.render("pebble/home.peb", model);
@@ -38,6 +44,7 @@ public class ArticleWeb implements Runnable {
         logger.info("setting up web app");
         var app = Javalin.create().start(4080);
         app.get("/", this::home);
+        app.get("/authors/top", this::topAuthors);
         logger.info("ready to go!");
         synchronized (this) {
             try {
