@@ -1,5 +1,7 @@
 package edu.boisestate.cs410.articles;
 
+import edu.boisestate.cs410.articles.model.Article;
+import edu.boisestate.cs410.articles.model.Author;
 import edu.boisestate.cs410.articles.model.AuthorSummary;
 import edu.boisestate.cs410.articles.model.DBStats;
 import io.javalin.Javalin;
@@ -29,6 +31,18 @@ public class ArticleWeb implements Runnable {
         ctx.render("pebble/top-authors.peb", model);
     }
 
+    public void author(Context ctx) throws SQLException {
+        Map<String,Object> model = new HashMap<>();
+        int id = ctx.pathParam("au_id", Integer.class).get();
+
+        try (var db = main.openDatabase()) {
+            model.put("author", Author.fromId(db, id));
+            model.put("articles", Article.fetchForAuthor(db, id));
+        }
+
+        ctx.render("pebble/author.peb", model);
+    }
+
     public void home(Context ctx) throws SQLException {
         Map<String,Object> model = new HashMap<>();
 
@@ -45,6 +59,7 @@ public class ArticleWeb implements Runnable {
         var app = Javalin.create().start(4080);
         app.get("/", this::home);
         app.get("/authors/top", this::topAuthors);
+        app.get("/authors/:au_id", this::author);
         logger.info("ready to go!");
         synchronized (this) {
             try {

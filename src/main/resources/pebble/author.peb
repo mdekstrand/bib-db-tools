@@ -1,0 +1,11 @@
+{% extends "pebble/layout.peb" %}
+
+{% block content %}
+<h1>{{ author.name }}</h1>
+
+<ul>
+{% for article in articles %}
+<li>{{ article.pubYear }}. <a href="/article/{{ article.id }}">{{ article.title }}</a>. <cite>{{ article.pubTitle }}</cite>.
+{% endfor %}
+</ul>
+{% endblock %}
