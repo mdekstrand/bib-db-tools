@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,11 +21,12 @@ public class ArticleWeb implements Runnable {
 
     @CommandLine.ParentCommand
     private ArticleMain main;
+    private DataSource dbSrc;
 
     public void topAuthors(Context ctx) throws SQLException {
         Map<String,Object> model = new HashMap<>();
 
-        try (var db = main.openDatabase()) {
+        try (var db = dbSrc.getConnection()) {
             model.put("authors", AuthorSummary.fetchTopPublished(db));
         }
 
@@ -35,7 +37,7 @@ public class ArticleWeb implements Runnable {
         Map<String,Object> model = new HashMap<>();
         int id = ctx.pathParam("au_id", Integer.class).get();
 
-        try (var db = main.openDatabase()) {
+        try (var db = dbSrc.getConnection()) {
             model.put("author", Author.fromId(db, id));
             model.put("articles", Article.fetchForAuthor(db, id));
         }
@@ -46,7 +48,7 @@ public class ArticleWeb implements Runnable {
     public void home(Context ctx) throws SQLException {
         Map<String,Object> model = new HashMap<>();
 
-        try (var db = main.openDatabase()) {
+        try (var db = dbSrc.getConnection()) {
             model.put("stats", DBStats.fetch(db));
         }
 
@@ -55,18 +57,26 @@ public class ArticleWeb implements Runnable {
 
     @Override
     public void run() {
-        logger.info("setting up web app");
-        var app = Javalin.create().start(4080);
-        app.get("/", this::home);
-        app.get("/authors/top", this::topAuthors);
-        app.get("/authors/:au_id", this::author);
-        logger.info("ready to go!");
-        synchronized (this) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                /* do nothing */
+        logger.info("initializing connection pool");
+        try (var pool = main.createDataSource()) {
+            dbSrc = pool;
+            logger.info("setting up web app");
+            var app = Javalin.create().start(4080);
+            app.get("/", this::home);
+            app.get("/authors/top", this::topAuthors);
+            app.get("/authors/:au_id", this::author);
+            logger.info("ready to go!");
+            synchronized (this) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    /* do nothing */
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            dbSrc = null;
         }
     }
 }

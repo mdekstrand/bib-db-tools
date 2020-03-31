@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DBStats {
-    private final int authorCount;
+    private final int articleCount;
 
     DBStats(int ac) {
-        authorCount = ac;
+        articleCount = ac;
     }
 
     public static DBStats fetch(Connection cxn) throws SQLException {
@@ -20,7 +20,7 @@ public class DBStats {
         }
     }
 
-    public int getAuthorCount() {
-        return authorCount;
+    public int getArticleCount() {
+        return articleCount;
     }
 }
