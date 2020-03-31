@@ -18,6 +18,9 @@ public class Article {
     private int pubYear;
     private String pubTitle;
 
+    /**
+     * Get all articles by an author.
+     */
     public static List<Article> fetchForAuthor(Connection cxn, int authorId) throws SQLException {
         // article query
         var aq = "SELECT article_id, a.title, abstract, pub_title, EXTRACT(YEAR FROM pub_date) AS pub_year" +

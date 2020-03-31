@@ -15,6 +15,9 @@ public class AuthorSummary extends Author {
     public AuthorSummary() {
     }
 
+    /**
+     * Get the 100 most-published authors.
+     */
     public static List<AuthorSummary> fetchTopPublished(Connection cxn) throws SQLException {
         var cq = "SELECT author_id, author_name, COUNT(article_id) AS article_count" +
                 " FROM author JOIN article_author USING (author_id)" +
@@ -24,6 +27,9 @@ public class AuthorSummary extends Author {
         }
     }
 
+    /**
+     * Get a list of author summaries from a result set, consuming it.
+     */
     public static List<AuthorSummary> extFromResults(ResultSet rs) throws SQLException {
         List<AuthorSummary> list = new ArrayList<>();
         while (rs.next()) {

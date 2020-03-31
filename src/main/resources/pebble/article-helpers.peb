@@ -1,0 +1,13 @@
+{% macro author_list(authors) %}
+{% for author in authors -%}
+{% if loop.index == 1 and loop.last %}and
+{% elseif loop.last %}, and
+{% elseif not loop.first %}, {% endif %}
+{{ author.name }}
+{%- endfor %}
+{% endmacro %}
+
+{% macro citation(article) %}
+{{ author_list(article.authors) }}.
+{{ article.pubYear }}. <a href="/article/{{ article.id }}">{{ article.title }}</a>. <cite>{{ article.pubTitle }}</cite>.
+{% endmacro %}

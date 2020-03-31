@@ -1,18 +1,12 @@
 {% extends "pebble/layout.peb" %}
+{% import "pebble/article-helpers.peb" %}
 
 {% block content %}
 <h1>{{ author.name }}</h1>
 
 <ul>
 {% for article in articles %}
-<li>
-{% for author in article.authors -%}
-{% if loop.index == 1 and loop.last %}and
-{% elseif loop.last %}, and
-{% elseif not loop.first %}, {% endif %}
-{{ author.name }}
-{%- endfor %}.
-{{ article.pubYear }}. <a href="/article/{{ article.id }}">{{ article.title }}</a>. <cite>{{ article.pubTitle }}</cite>.
+<li>{{ citation(article) }}</li>
 {% endfor %}
 </ul>
 {% endblock %}
