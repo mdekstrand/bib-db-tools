@@ -44,6 +44,8 @@ public class ArticleMain implements Runnable {
         return new PoolingDataSource<>(pool);
 
         // PostgreSQL also has a pooling data source built in
+        // In larger applications, your application server (Tomcat, JBoss, etc.) will handle
+        // configuring the data source for you.
     }
 
     public void run() {
