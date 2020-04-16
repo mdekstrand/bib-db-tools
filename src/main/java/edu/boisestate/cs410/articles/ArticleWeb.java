@@ -45,6 +45,30 @@ public class ArticleWeb implements Runnable {
         ctx.render("pebble/author.peb", model);
     }
 
+    public void article(Context ctx) throws SQLException {
+        Map<String,Object> model = new HashMap<>();
+        int id = ctx.pathParam("aid", Integer.class).get();
+
+        try (var db = dbSrc.getConnection()) {
+            model.put("article", Article.fromId(db, id));
+        }
+
+        ctx.render("pebble/article.peb", model);
+    }
+
+    public void search(Context ctx) throws SQLException {
+        Map<String,Object> model = new HashMap<>();
+        String query = ctx.queryParam("q");
+
+        try (var db = dbSrc.getConnection()) {
+            model.put("query", query);
+            var results = Article.search(db, query);
+            model.put("articles", results);
+        }
+
+        ctx.render("pebble/search.peb", model);
+    }
+
     public void home(Context ctx) throws SQLException {
         Map<String,Object> model = new HashMap<>();
 
@@ -65,6 +89,8 @@ public class ArticleWeb implements Runnable {
             app.get("/", this::home);
             app.get("/authors/top", this::topAuthors);
             app.get("/authors/:au_id", this::author);
+            app.get("/articles/:aid", this::article);
+            app.get("/search", this::search);
             logger.info("ready to go!");
             synchronized (this) {
                 try {

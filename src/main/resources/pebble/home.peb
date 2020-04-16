@@ -9,4 +9,10 @@
 <ul>
 <li><a href="/authors/top">Top authors</a>
 </ul>
+
+<h2>Search</h2>
+<form action="/search" method="GET">
+<label>Search: <input type="search" name="q" placeholder="search terms"></label>
+<input type="submit" value="Search">
+</form>
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends "pebble/layout.peb" %}
+{% import "pebble/article-helpers.peb" %}
+
+{% block content %}
+<h1>Search for ‘{{ query }}’</h1>
+
+<form action="/search" method="GET">
+<label>Search: <input type="search" name="q" value="{{ query }}"></label>
+<input type="submit" value="Search">
+</form>
+
+<ul>
+{% for article in articles %}
+<li>{{ citation(article) }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

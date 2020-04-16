@@ -30,6 +30,7 @@ CREATE TABLE proceedings (
   FOREIGN KEY (cs_id) REFERENCES conf_series (cs_id),
   FOREIGN KEY (pub_id) REFERENCES publication (pub_id)
 );
+CREATE INDEX proc_cs_idx ON proceedings (cs_id);
 
 DROP TABLE IF EXISTS journal CASCADE;
 CREATE TABLE journal (
@@ -49,6 +50,7 @@ CREATE TABLE issue (
   FOREIGN KEY (pub_id) REFERENCES publication (pub_id),
   FOREIGN KEY (journal_id) REFERENCES journal (journal_id)
 );
+CREATE INDEX issue_journal_idx ON issue (journal_id);
 
 DROP TABLE IF EXISTS article CASCADE;
 CREATE TABLE article (
@@ -61,6 +63,7 @@ CREATE TABLE article (
   FOREIGN KEY (pub_id) REFERENCES publication (pub_id)
 );
 CREATE INDEX article_hb_key_idx ON article (article_hb_key);
+CREATE INDEX article_pub_idx ON article (pub_id);
 
 DROP TABLE IF EXISTS article_author CASCADE;
 CREATE TABLE article_author (
@@ -71,6 +74,8 @@ CREATE TABLE article_author (
   FOREIGN KEY (article_id) REFERENCES article (article_id),
   FOREIGN KEY (author_id) REFERENCES author (author_id)
 );
+CREATE INDEX article_author_art_idx ON article_author (article_id);
+CREATE INDEX article_author_auth_idx ON article_author (author_id);
 
 DROP VIEW IF EXISTS pub_title;
 CREATE VIEW pub_title
@@ -79,6 +84,19 @@ AS SELECT pub_id,
            journal_title || ' vol. ' || issue_vol || ' no. ' || issue_num,
            journal_title || ' no. ' || issue_num,
            journal_title || ' vol. ' || issue_vol) AS pub_title
+FROM publication
+LEFT JOIN proceedings USING (pub_id)
+LEFT JOIN issue USING (pub_id)
+LEFT JOIN journal USING (journal_id);
+
+DROP VIEW IF EXISTS pub_info;
+CREATE VIEW pub_info
+AS SELECT pub_id,
+          EXTRACT(YEAR FROM pub_date) AS pub_year,
+          COALESCE(proc_title, issue_title,
+                   journal_title || ' vol. ' || issue_vol || ' no. ' || issue_num,
+                   journal_title || ' no. ' || issue_num,
+                   journal_title || ' vol. ' || issue_vol) AS pub_title
 FROM publication
 LEFT JOIN proceedings USING (pub_id)
 LEFT JOIN issue USING (pub_id)

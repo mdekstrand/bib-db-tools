@@ -9,5 +9,5 @@
 
 {% macro citation(article) %}
 {{ author_list(article.authors) }}.
-{{ article.pubYear }}. <a href="/article/{{ article.id }}">{{ article.title }}</a>. <cite>{{ article.pubTitle }}</cite>.
+{{ article.pubYear }}. <a href="/articles/{{ article.id }}">{{ article.title }}</a>. <cite>{{ article.pubTitle }}</cite>.
 {% endmacro %}
