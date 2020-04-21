@@ -76,11 +76,9 @@ BEGIN
       SELECT article_id, setweight(to_tsvector(title), 'A')
                          || setweight(to_tsvector(coalesce(author_string, '')), 'A')
                          || setweight(to_tsvector(coalesce(abstract, '')), 'B')
-                         || setweight(to_tsvector(coalesce(iss_title, '')), 'C')
                          || setweight(to_tsvector(coalesce(pub_title, '')), 'C')
       FROM article a
-        JOIN issue USING (issue_id)
-        JOIN publication USING (pub_id)
+        JOIN pub_info USING (pub_id)
         LEFT OUTER JOIN (SELECT article_id,
                            string_agg(author_name, ' ') AS author_string
                          FROM article_author
@@ -93,11 +91,9 @@ BEGIN
     SET article_vector = setweight(to_tsvector(title), 'A')
                          || setweight(to_tsvector(coalesce(author_string, '')), 'A')
                          || setweight(to_tsvector(coalesce(abstract, '')), 'B')
-                         || setweight(to_tsvector(coalesce(iss_title, '')), 'C')
                          || setweight(to_tsvector(coalesce(pub_title, '')), 'C')
     FROM article a
-      JOIN issue USING (issue_id)
-      JOIN publication USING (pub_id)
+      JOIN pub_info USING (pub_id)
       LEFT OUTER JOIN (SELECT article_id,
                          string_agg(author_name, ' ') AS author_string
                        FROM article_author

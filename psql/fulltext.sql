@@ -19,12 +19,10 @@ INSERT INTO article_search (article_id, article_vector, up2date)
                      FROM article_author
                        JOIN author USING (author_id)
                      GROUP BY article_id) aasum
-    USING (article_id)
-    LEFT OUTER JOIN article_search USING (article_id)
-  WHERE article_vector IS NULL;
+    USING (article_id);
 
 CREATE INDEX article_search_idx
-ON article_search USING gin(article_vector);
+ON article_search USING gin (article_vector);
 ANALYZE article_search;
 
 -- LIVE UPDATE CODE
@@ -53,26 +51,29 @@ ON article_author
 FOR EACH ROW EXECUTE PROCEDURE dirty_article();
 
 -- PERIODIC UPDATE
-INSERT INTO article_search (article_id, article_vector, up2date)
-  SELECT article_id, to_tsvector(''), FALSE
-  FROM article
-    LEFT OUTER JOIN article_search USING (article_id)
-  WHERE article_vector IS NULL;
 
-UPDATE article_search srch
-SET article_vector = setweight(to_tsvector(title), 'A')
+-- Delete out-of-date records
+DELETE FROM article_search
+WHERE NOT up2date;
+
+-- Update article records
+INSERT INTO article_search (article_id, article_vector, up2date)
+SELECT article_id,
+       setweight(to_tsvector(title), 'A')
     || setweight(to_tsvector(coalesce(author_string, '')), 'A')
     || setweight(to_tsvector(coalesce(abstract, '')), 'B')
-    || setweight(to_tsvector(coalesce(iss_title, '')), 'C')
     || setweight(to_tsvector(coalesce(pub_title, '')), 'C'),
-  up2date = TRUE
+        TRUE
 FROM article a
-  JOIN issue USING (issue_id)
-  JOIN publication USING (pub_id)
+  JOIN pub_info USING (pub_id)
   LEFT OUTER JOIN (SELECT article_id,
                      string_agg(author_name, ' ') AS author_string
                    FROM article_author
                      JOIN author USING (author_id)
                    GROUP BY article_id) aasum
   USING (article_id)
-WHERE srch.article_id = a.article_id AND NOT up2date;
+WHERE NOT EXISTS (SELECT * FROM article_search srch
+                  WHERE article_id = a.article_id);
+
+-- Analyze the search table
+ANALYZE article_search;
