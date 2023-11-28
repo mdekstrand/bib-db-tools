@@ -9,7 +9,7 @@
   "author": "Michael Ekstrand <michaelekstrand@boisestate.edu>",
   "license": "UNLICENSED",
   "dependencies": {
-    "any-db": "^2.2.1",
+    "any-db": "^2.1.0",
     "any-db-mysql": "^2.1.2",
     "any-db-postgres": "^2.1.5",
     "any-db-transaction": "^2.2.2",
