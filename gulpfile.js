@@ -37,7 +37,7 @@ module.exports.importConferenceData = function importConferences() {
   });
 };
 
-module.exports.importAllData = function importConferences() {
+module.exports.importAllData = function importAllData() {
   let url = args.url;
   return Promise.using(dbutil.makePool(url), async (pool) => {
     let confP = Promise.using(pool.acquire(),
