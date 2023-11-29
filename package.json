@@ -12,6 +12,7 @@
     "any-db": "^2.1.0",
     "any-db-mysql": "^2.1.2",
     "any-db-postgres": "^2.1.5",
+    "any-db-sqlite3": "^2.3.0",
     "any-db-transaction": "^2.2.2",
     "bluebird": "^3.5.2",
     "byline": "^5.0.0",
